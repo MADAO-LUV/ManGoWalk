@@ -1,0 +1,76 @@
+plugins {
+    alias(libs.plugins.androidApplication)
+}
+
+android {
+    namespace 'com.example.mangowalking'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.example.mangowalking"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        ndk {
+            //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86","x86_64"
+        }
+
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+        debug.setRoot('build-types/debug')
+        release.setRoot('build-types/release')
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+
+}
+
+// 构建时间
+def generateTime(){
+    return new Date().format("yyyy_MM_dd_HH_mm_ss")
+}
+
+
+// 自定义打包名称
+android.applicationVariants.all { variant ->
+    variant.outputs.all {
+        outputFileName = "ManGoWalk_v${versionName}_${generateTime()}.apk"
+    }
+}
+
+
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation libs.appcompat
+    implementation libs.material
+    implementation libs.activity
+    implementation libs.constraintlayout
+//    implementtation 'cn.shanyaliux.serialport:serialport:4.2.0'
+//    implementation 'com.amap.api:3dmap-location-search:latest.integration'
+//    implementation 'com.amap.api:3dmap:latest.integration'
+//    implementation 'com.amap.api:location:6.4.9'
+    testImplementation libs.junit
+    androidTestImplementation libs.ext.junit
+    androidTestImplementation libs.espresso.core
+}
