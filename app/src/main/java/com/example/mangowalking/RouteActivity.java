@@ -1,5 +1,6 @@
 package com.example.mangowalking;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.example.mangowalking.utils.MapUtil.convertToLatLng;
 import static com.example.mangowalking.utils.MapUtil.convertToLatLonPoint;
 
@@ -31,6 +32,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -41,6 +43,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -56,6 +59,7 @@ import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.amap.api.navi.AMapNavi;
 import com.amap.api.services.busline.BusLineItem;
 import com.amap.api.services.core.AMapException;
 import com.amap.api.services.core.LatLonPoint;
@@ -151,6 +155,7 @@ public class RouteActivity extends AppCompatActivity implements
 
     private BluetoothGattCharacteristic writeCharacteristic;
 
+    private ArrayList<LatLng> poiListForGuideMap = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,6 +168,7 @@ public class RouteActivity extends AppCompatActivity implements
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         //添加蓝牙开启   蓝牙部分是成功开启了
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             Toast.makeText(RouteActivity.this, "没有蓝牙", Toast.LENGTH_SHORT).show();
@@ -182,6 +188,8 @@ public class RouteActivity extends AppCompatActivity implements
         @SuppressLint("MissingPermission")
         Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE); //创建一个蓝牙启动的意图
         launcher.launch(enableBtIntent);//使用launcer启动这个意图就可以了。
+
+
         //此处可行
         //初始化定位
         initLocation();
@@ -193,6 +201,7 @@ public class RouteActivity extends AppCompatActivity implements
         //初始化出行方式
         initTravelMode();
 
+        binding.buttonmy.setOnClickListener(v->startActivity(new Intent(this,GuideMap.class)));
         // 新加入的
         scanner = bluetoothAdapter.getBluetoothLeScanner();
         //不进行权限验证
@@ -213,13 +222,31 @@ public class RouteActivity extends AppCompatActivity implements
         ScanFilter sn = new ScanFilter.Builder().setDeviceName("蓝牙设备的名称").setServiceUuid(ParcelUuid.fromString("0000FFE0-0000-1000-8000-00805F9B34FB")).build();
         List<ScanFilter> scanFilters = new ArrayList<>();
         scanFilters.add(sn);
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_SCAN) != PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             return;
         }
         scanner.startScan(scanFilters, new ScanSettings.Builder().build(), callback);
         bluetoothGatt = device.connectGatt(this, false, gattCallback);
+
+//        Button btn_1 = findViewById(R.id.btn_ble);
+//
+//        // 重写一个内部类
+//        btn_1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d("RouteActivity", "点击了跳转按钮");
+////                ArrayList<LatLng> poiList = new ArrayList<>();
+//                //这只是一个意图
+//                Intent intent = new Intent(RouteActivity.this,GuideMap.class);
+////                intent.putParcelableArrayListExtra("poi_list",poiList);
+//                startActivity(intent);
+//            }
+//        });
+// RouteActivity.java 中修改点击事件
+
+
     }
 
     BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
@@ -228,7 +255,7 @@ public class RouteActivity extends AppCompatActivity implements
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             super.onConnectionStateChange(gatt, status, newState);
             if (newState == BluetoothProfile.STATE_CONNECTED) {
-                if (ActivityCompat.checkSelfPermission(RouteActivity.this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(RouteActivity.this, android.Manifest.permission.BLUETOOTH_CONNECT) != PERMISSION_GRANTED) {
                     return;
                 }
                 gatt.discoverServices();
@@ -300,7 +327,7 @@ public class RouteActivity extends AppCompatActivity implements
                 // 假设写特征的 UUID 就是 READ_UUID（或者你需要再定义一个 WRITE_UUID）
                 writeCharacteristic = service.getCharacteristic(UUID.fromString(READ_UUID));
                 // 如果该特征需要先 enableNotification，也可在这里设置：
-                if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PERMISSION_GRANTED) {
                     return;
                 }
                 gatt.setCharacteristicNotification(writeCharacteristic, true);
@@ -327,7 +354,7 @@ public class RouteActivity extends AppCompatActivity implements
             writeCharacteristic.setValue(data);
 
             // 3) 发写命令，异步执行
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PERMISSION_GRANTED) {
                 return;
             }
             boolean success = bluetoothGatt.writeCharacteristic(writeCharacteristic);
@@ -400,13 +427,18 @@ public class RouteActivity extends AppCompatActivity implements
             mLocationClient.setLocationListener(this);
             mLocationOption = new AMapLocationClientOption();
             mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-            mLocationOption.setOnceLocationLatest(true);
+            // 设置定位间隔   2000ms更新一次
+            mLocationOption.setInterval(2000);
+            //
+            mLocationOption.setOnceLocationLatest(false);
             mLocationOption.setNeedAddress(true);
             mLocationOption.setHttpTimeOut(20000);
             mLocationOption.setLocationCacheEnable(false);
             mLocationClient.setLocationOption(mLocationOption);
         }
     }
+
+
 
     /**
      * 初始化地图
@@ -571,7 +603,7 @@ public class RouteActivity extends AppCompatActivity implements
         binding.mapView.onDestroy();
 
         if (bluetoothGatt != null) {
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PERMISSION_GRANTED) {
                 return;
             }
             bluetoothGatt.close();
@@ -673,6 +705,8 @@ public class RouteActivity extends AppCompatActivity implements
                 }
             }
         }
+        poiListForGuideMap.clear();
+        poiListForGuideMap.addAll(allPoiPoints);
 
 //        // 🧪 测试打印
 //        for (LatLng p : poiList) {
@@ -753,6 +787,8 @@ public class RouteActivity extends AppCompatActivity implements
             Log.d("POI_POINT", p.latitude + "," + p.longitude);
         }
         sendPoiList(poiList);
+        poiListForGuideMap.clear();
+        poiListForGuideMap.addAll(poiList);
     }
 
 
