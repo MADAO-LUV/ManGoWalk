@@ -201,7 +201,22 @@ public class RouteActivity extends AppCompatActivity implements
         //初始化出行方式
         initTravelMode();
 
-        binding.buttonmy.setOnClickListener(v->startActivity(new Intent(this,GuideMap.class)));
+        // 源码  --->
+        //binding.buttonmy.setOnClickListener(v->startActivity(new Intent(this,GuideMap.class)));
+        binding.buttonmy.setOnClickListener(v -> {
+            // 检查终点坐标是否存在
+            if (mEndPoint != null) {
+                Intent intent = new Intent(this, GuideMap.class);
+                // 将终点坐标放入Intent
+                intent.putExtra("end_lat", mEndPoint.getLatitude());
+                intent.putExtra("end_lon", mEndPoint.getLongitude());
+                Log.d("RouteActivity", "准备跳转 GuideMap，终点：" + mEndPoint.getLatitude() + "," + mEndPoint.getLongitude());
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, "请先选择目的地", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         // 新加入的
         scanner = bluetoothAdapter.getBluetoothLeScanner();
         //不进行权限验证

@@ -24,6 +24,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
 
+
+
     <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
@@ -49,6 +51,10 @@
             android:name=".RouteActivity"
             android:exported="false" />
         <activity
+            android:name="com.amap.api.navi.AmapRouteActivity"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:configChanges="orientation|keyboardHidden|screenSize|navigation" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:hardwareAccelerated="true"
@@ -63,6 +69,12 @@
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="14f8203a16e09d7000bd8b31c9bf1ef7" />
+        <meta-data
+            android:name="IFLYTEK_APPKEY"
+            android:value="1342cc62" />
+        <meta-data
+            android:name="IFLYTEK_CHANNEL"
+            android:value="Android_Demo" />
     </application>
 
 </manifest>
