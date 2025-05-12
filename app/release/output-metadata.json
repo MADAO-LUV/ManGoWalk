@@ -13,7 +13,7 @@
       "attributes": [],
       "versionCode": 1,
       "versionName": "1.0",
-      "outputFile": "ManGoWalk_v1.0_2025_04_17_19_59_18.apk"
+      "outputFile": "ManGoWalk_v1.0_2025_05_13_14_36_52.apk"
     }
   ],
   "elementType": "File",
@@ -22,14 +22,14 @@
       "minApi": 28,
       "maxApi": 30,
       "baselineProfiles": [
-        "baselineProfiles/1/ManGoWalk_v1.0_2025_04_17_19_59_18.dm"
+        "baselineProfiles/1/ManGoWalk_v1.0_2025_05_13_14_36_52.dm"
       ]
     },
     {
       "minApi": 31,
       "maxApi": 2147483647,
       "baselineProfiles": [
-        "baselineProfiles/0/ManGoWalk_v1.0_2025_04_17_19_59_18.dm"
+        "baselineProfiles/0/ManGoWalk_v1.0_2025_05_13_14_36_52.dm"
       ]
     }
   ],

@@ -22,4 +22,15 @@
 
 -keep class com.amap.api.navi.**{*;}
 -keep class com.alibaba.idst.nui.* {*;}
+
+-keep class com.google.**{*;}
+
+-keep class com.alibaba.idst.nls.** {*;}
+
+#-keep class com.google.**{*;}
+
+-keep class com.nlspeech.nlscodec.** {*;}
+
+-keep public class com.alibaba.mit.alitts.*{*;}
+
 -keep class com.google.**{*;}

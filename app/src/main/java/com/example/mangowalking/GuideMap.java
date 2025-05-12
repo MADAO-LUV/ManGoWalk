@@ -1,6 +1,7 @@
 package com.example.mangowalking;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -63,7 +64,9 @@ public class GuideMap extends AppCompatActivity implements AMapNaviListener, AMa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_guide_map);
+        mNaviView = findViewById(R.id.naviView);
+        mNaviView.onCreate(savedInstanceState);
         // 获取传入的终点经纬度
         Intent intent = getIntent();
         endLat = intent.getDoubleExtra("end_lat", 0);
@@ -75,138 +78,252 @@ public class GuideMap extends AppCompatActivity implements AMapNaviListener, AMa
             Toast.makeText(this, "终点坐标可能异常", Toast.LENGTH_LONG).show();
         }
         end = new NaviLatLng(endLat,endLon);
-        startNaviToDestination(currentNaviType);
-//
-//        mNaviView = findViewById(R.id.naviView);
-//        mNaviView.onCreate(savedInstanceState);
-//
-//        mTtsManager = TTSController.getInstance(getApplicationContext());
-//        mTtsManager.init();
-//        mTtsManager.setTTSType(TTSController.TTSType.SYSTEMTTS);
-//        try {
-//            AMapNavi.getInstance(this).calculateWalkRoute(null,end);
-//        } catch (AMapException e) {
-//            throw new RuntimeException(e);
-//        }
-
+        navigation(this,0,0,endLat,endLon);
         try {
-            AMapNavi.getInstance(this).calculateWalkRoute(end);
-            mAMapNavi = AMapNavi.getInstance(getApplicationContext());
-            mAMapNavi.setUseInnerVoice(true,false);
-            AMapNavi.setTtsPlaying(true);
+            AMapNavi.getInstance(getApplicationContext()).addAMapNaviListener(new AMapNaviListener() {
+                @Override
+                public void onInitNaviFailure() {
+
+                }
+
+                @Override
+                public void onInitNaviSuccess() {
+
+                }
+
+                @Override
+                public void onStartNavi(int i) {
+
+                }
+
+                @Override
+                public void onTrafficStatusUpdate() {
+
+                }
+
+                @Override
+                public void onLocationChange(AMapNaviLocation aMapNaviLocation) {
+
+                }
+
+                @Override
+                public void onGetNavigationText(int i, String s) {
+
+                }
+
+                @Override
+                public void onGetNavigationText(String s) {
+
+                }
+
+                @Override
+                public void onEndEmulatorNavi() {
+
+                }
+
+                @Override
+                public void onArriveDestination() {
+
+                }
+
+                @Override
+                public void onCalculateRouteFailure(int i) {
+
+                }
+
+                @Override
+                public void onReCalculateRouteForYaw() {
+
+                }
+
+                @Override
+                public void onReCalculateRouteForTrafficJam() {
+
+                }
+
+                @Override
+                public void onArrivedWayPoint(int i) {
+
+                }
+
+                @Override
+                public void onGpsOpenStatus(boolean b) {
+
+                }
+
+                @Override
+                public void onNaviInfoUpdate(NaviInfo naviInfo) {
+
+                }
+
+                @Override
+                public void updateCameraInfo(AMapNaviCameraInfo[] aMapNaviCameraInfos) {
+
+                }
+
+                @Override
+                public void updateIntervalCameraInfo(AMapNaviCameraInfo aMapNaviCameraInfo, AMapNaviCameraInfo aMapNaviCameraInfo1, int i) {
+
+                }
+
+                @Override
+                public void onServiceAreaUpdate(AMapServiceAreaInfo[] aMapServiceAreaInfos) {
+
+                }
+
+                @Override
+                public void showCross(AMapNaviCross aMapNaviCross) {
+
+                }
+
+                @Override
+                public void hideCross() {
+
+                }
+
+                @Override
+                public void showModeCross(AMapModelCross aMapModelCross) {
+
+                }
+
+                @Override
+                public void hideModeCross() {
+
+                }
+
+                @Override
+                public void showLaneInfo(AMapLaneInfo[] aMapLaneInfos, byte[] bytes, byte[] bytes1) {
+
+                }
+
+                @Override
+                public void showLaneInfo(AMapLaneInfo aMapLaneInfo) {
+
+                }
+
+                @Override
+                public void hideLaneInfo() {
+
+                }
+
+                @Override
+                public void onCalculateRouteSuccess(int[] ints) {
+
+                }
+
+                @Override
+                public void notifyParallelRoad(int i) {
+
+                }
+
+                @Override
+                public void OnUpdateTrafficFacility(AMapNaviTrafficFacilityInfo[] aMapNaviTrafficFacilityInfos) {
+
+                }
+
+                @Override
+                public void OnUpdateTrafficFacility(AMapNaviTrafficFacilityInfo aMapNaviTrafficFacilityInfo) {
+
+                }
+
+                @Override
+                public void updateAimlessModeStatistics(AimLessModeStat aimLessModeStat) {
+
+                }
+
+                @Override
+                public void updateAimlessModeCongestionInfo(AimLessModeCongestionInfo aimLessModeCongestionInfo) {
+
+                }
+
+                @Override
+                public void onPlayRing(int i) {
+
+                }
+
+                @Override
+                public void onCalculateRouteSuccess(AMapCalcRouteResult aMapCalcRouteResult) {
+
+                }
+
+                @Override
+                public void onCalculateRouteFailure(AMapCalcRouteResult aMapCalcRouteResult) {
+
+                }
+
+                @Override
+                public void onNaviRouteNotify(AMapNaviRouteNotifyData aMapNaviRouteNotifyData) {
+
+                }
+
+                @Override
+                public void onGpsSignalWeak(boolean b) {
+
+                }
+            });
         } catch (AMapException e) {
             throw new RuntimeException(e);
         }
-        mAMapNavi.addAMapNaviListener(mTtsManager);
-        mAMapNavi.playTTS("主人你好呀", false);
-
-//        mAMapNavi.startNavi(NaviType.EMULATOR);
-        //以上为新添加的 不知道怎么处理
-
-        //        try {
-//            mAMapNavi = AMapNavi.getInstance(getApplicationContext());
-//        } catch (AMapException e) {
-//            throw new RuntimeException(e);
-//        }
-//        mAMapNavi.addAMapNaviListener(this);
-//        mAMapNavi.addAMapNaviListener(mTtsManager);
-//
-//        // 🚩 设置为骑/步行视图（重要）
-//        mAMapNavi.setIsNaviTravelView(true);
-//
-//        // 🚶 步行路线规划（起点为空）——无起点规划
-//        NaviLatLng end = new NaviLatLng(endLat, endLon);
-//        mAMapNavi.calculateWalkRoute(end);  // 或 mAMapNavi.calculateRideRoute(end);
-//
-//        // 初始化界面控件
-//        tvRouteInfo = findViewById(R.id.tvRouteInfo);
-//        btnStartNavi = findViewById(R.id.btnStartNavi);
-//        btnSwitchMode = findViewById(R.id.btnSwitchMode);
-//        // 切换模式按钮
-//        btnSwitchMode.setOnClickListener(new View.OnClickListener() {
+//        mNaviView.setAMapNaviViewListener(new AMapNaviViewListener() {
 //            @Override
-//            public void onClick(View view) {
-//                if (currentNaviType == AmapNaviType.WALK) {
-//                    currentNaviType = AmapNaviType.DRIVER;
-//                } else {
-//                    currentNaviType = AmapNaviType.WALK;
-//                }
-//                updateRouteInfoText();
-//            }
-//        });
+//            public void onNaviSetting() {
 //
-//        // 开始导航按钮
-//        btnStartNavi.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startNaviToDestination(currentNaviType);
 //            }
+//
+//            @Override
+//            public void onNaviCancel() {
+//
+//            }
+//
+//            @Override
+//            public boolean onNaviBackClick() {
+//                return false;
+//            }
+//
+//            @Override
+//            public void onNaviMapMode(int i) {
+//
+//            }
+//
+//            @Override
+//            public void onNaviTurnClick() {
+//
+//            }
+//
+//            @Override
+//            public void onNextRoadClick() {
+//
+//            }
+//
+//            @Override
+//            public void onScanViewButtonClick() {
+//
+//            }
+//
+//            @Override
+//            public void onLockMap(boolean b) {
+//
+//            }
+//
+//            @Override
+//            public void onNaviViewLoaded() {
+//                Log.d("wlx","导航页面加载成功");
+//                Log.d("wlx","请不要使用AMapNaviView.getMap().setOnMapLoadedListener();会overwrite导航SDK内部画线逻辑");
+//            }
+//
+//            @Override
+//            public void onMapTypeChanged(int i) {
+//
+//            }
+//
+//            @Override
+//            public void onNaviViewShowMode(int i) {
+//
+//            }
+//            // 处理导航视图事件...
 //        });
 
-        mNaviView.setAMapNaviViewListener(new AMapNaviViewListener() {
-            @Override
-            public void onNaviSetting() {
 
-            }
-
-            @Override
-            public void onNaviCancel() {
-
-            }
-
-            @Override
-            public boolean onNaviBackClick() {
-                return false;
-            }
-
-            @Override
-            public void onNaviMapMode(int i) {
-
-            }
-
-            @Override
-            public void onNaviTurnClick() {
-
-            }
-
-            @Override
-            public void onNextRoadClick() {
-
-            }
-
-            @Override
-            public void onScanViewButtonClick() {
-
-            }
-
-            @Override
-            public void onLockMap(boolean b) {
-
-            }
-
-            @Override
-            public void onNaviViewLoaded() {
-                Log.d("wlx","导航页面加载成功");
-                Log.d("wlx","请不要使用AMapNaviView.getMap().setOnMapLoadedListener();会overwrite导航SDK内部画线逻辑");
-            }
-
-            @Override
-            public void onMapTypeChanged(int i) {
-
-            }
-
-            @Override
-            public void onNaviViewShowMode(int i) {
-
-            }
-            // 处理导航视图事件...
-        });
-
-        // 3. 添加途经点（可选）
-//        mWayPoints.add(new NaviLatLng(39.993706, 116.400865));
-        //初始化定位
-//        initLocation();
-//        mNaviView.setNaviMode(mNaviView.NORTH_UP_MODE);
     }
     @Override
     public void onNaviSetting() {
@@ -287,26 +404,6 @@ public class GuideMap extends AppCompatActivity implements AMapNaviListener, AMa
 
 
 
-    // 初始化定位配置
-    private void initLocation() {
-        try {
-            mapLocationClient = new AMapLocationClient(getApplicationContext());
-            mLocationOption = new AMapLocationClientOption();
-            mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-            mLocationOption.setInterval(2000);
-            mapLocationClient.setLocationListener((AMapLocationListener) this);
-            mapLocationClient.setLocationOption(mLocationOption);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    private void updateRouteInfoText() {
-        String modeText = currentNaviType == AmapNaviType.WALK ? "步行模式" : "公交模式";
-        tvRouteInfo.setText("当前导航模式：" + modeText);
-    }
-
     private void startNaviToDestination(AmapNaviType naviType) {
         Poi end = new Poi("目的地", new LatLng(endLat, endLon), null);
         AmapNaviParams params = new AmapNaviParams(null, null, end, naviType, AmapPageType.ROUTE);
@@ -315,8 +412,22 @@ public class GuideMap extends AppCompatActivity implements AMapNaviListener, AMa
     }
 
 
+    public void navigation(Context context,double slat,double slon,double dlat,double dlon)
+    {
+        Poi start = null;
+        //如果设置了起点
+        if(slat != 0 && slon != 0)
+        {
+            start = new Poi("起点名称",new LatLng(slat,slon),"");
+        }
+        Poi end  = new Poi("目的地",new LatLng(dlat,dlon),"");
+        AmapNaviParams params = new AmapNaviParams(start, null, end, AmapNaviType.WALK,AmapPageType.NAVI);
+        params.setUseInnerVoice(true);
+        params.setNeedCalculateRouteWhenPresent(true);
+        //发起导航
+        AmapNaviPage.getInstance().showRouteActivity(getApplicationContext(), params, null);
 
-
+    }
 
 
     @Override
@@ -350,6 +461,7 @@ public class GuideMap extends AppCompatActivity implements AMapNaviListener, AMa
         {
 //            mAMapNavi.removeAMapNaviListener(mTtsManager);
             mAMapNavi.stopNavi();
+            mAMapNavi.notify();
         }
         mNaviView.onDestroy();
     }
@@ -519,12 +631,8 @@ public class GuideMap extends AppCompatActivity implements AMapNaviListener, AMa
 
     @Override
     public void onCalculateRouteSuccess(AMapCalcRouteResult aMapCalcRouteResult) {
-        try {
-            AMapNavi.getInstance(this).startNavi(NaviType.GPS);
-            AMapNavi.getInstance(this.getApplicationContext()).setIsNaviTravelView(true);
-        } catch (AMapException e) {
-            throw new RuntimeException(e);
-        }
+        mAMapNavi.startNavi(NaviType.GPS);
+        mAMapNavi.playTTS("主人你好呀", false);
     }
 
     @Override
