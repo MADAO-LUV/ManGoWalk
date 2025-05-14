@@ -1,5 +1,6 @@
 # ManGoWalk  --- 智能盲杖导航系统
 ## Anime 水印  ---  《谜之彼女X》 卜部美琴
+<a name="my-desiki-anime-girl"></a>
 ![卜部美琴](https://picx.zhimg.com/50/v2-ce3ffbff0aab1f12ff55a1625d9188a2_720w.jpg?source=1940ef5c)
 # 主要参考文档:
 ## 参考文档1(官方):
@@ -12,12 +13,14 @@
 5. 蓝牙BLE的一个坑---[BLE](https://blog.csdn.net/a_zhon/article/details/100018719?spm=1001.2014.3001.5506)
 
 # 目录
-1. [Anime水印](##Anime水印---《谜之彼女X》卜部美琴)   
-2. [项目介绍](##对于ManGoWalk)
+1. [Anime水印](#my-desiki-anime-girl)   
+2. [项目介绍](#project-introduce)
 
 
 
-## 对于ManGoWalk
+## 对于ManGoWalk                               
+<a name="project-introduce"></a>  
+*本项目因关注市面上的盲人手杖常常缺乏智能化，而且价格昂贵，功能不齐全等项目落脚点出发，经过多方综合考虑，打造出全新的智能盲杖---同时也适用于广大老年人群体*
 
 
 
