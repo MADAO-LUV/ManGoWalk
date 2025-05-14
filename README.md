@@ -2,10 +2,34 @@
 ## Anime 水印  ---  《谜之彼女X》 卜部美琴
 ![卜部美琴](https://picx.zhimg.com/50/v2-ce3ffbff0aab1f12ff55a1625d9188a2_720w.jpg?source=1940ef5c)
 # 主要参考文档:
-## 参考文档1:
+## 参考文档1(官方):
 高德开发平台-[导航SDK文档](https://lbs.amap.com/api/android-navi-sdk/summary/)
 ## 参考文档2:
-高德地图开发文章---[CSND 初学者博主](https://blog.csdn.net/qq_38436214/article/details/111628025?spm=1001.2014.3001.5506)
+1. 高德地图开发文章---[CSND 初学者博主](https://blog.csdn.net/qq_38436214/article/details/111628025?spm=1001.2014.3001.5506)
+2. [Android Studio打包APK](https://blog.csdn.net/qq_38436214/article/details/112288954?spm=1001.2014.3001.5506)
+3. BLE---[低功耗蓝牙开发BLE详细解读](https://blog.csdn.net/qq_51519091/article/details/138345280?spm=1001.2014.3001.5506)
+4. [低功耗蓝牙](https://blog.csdn.net/qq_38950819/article/details/103067487?spm=1001.2014.3001.5506)
+5. 蓝牙BLE的一个坑---[BLE](https://blog.csdn.net/a_zhon/article/details/100018719?spm=1001.2014.3001.5506)
+
+# 目录
+1. [Anime水印](##Anime水印---《谜之彼女X》卜部美琴)   
+2. [项目介绍](##对于ManGoWalk)
+
+
+
+## 对于ManGoWalk
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
